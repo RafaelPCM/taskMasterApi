@@ -139,4 +139,35 @@ public class TaskServiceImplTest {
         assertEquals("Test Task", result.get().getTitle());
     }
 
+    @Test
+    void testUpdateTask_NotFound() {
+        Task updatedTask = new Task();
+        updatedTask.setTitle("Updated Task");
+        updatedTask.setDescription("Updated Description");
+
+        when(taskRepository.findById(999L)).thenReturn(Optional.empty());
+
+        assertThrows(ResourceNotFoundException.class, () -> {
+            taskService.updateTask(999L, updatedTask, "username");
+        });
+    }
+
+    @Test
+    void testUpdateTaskStatus_NotFound() {
+        when(taskRepository.findById(999L)).thenReturn(Optional.empty());
+
+        assertThrows(ResourceNotFoundException.class, () -> {
+            taskService.updateTaskStatus(999L, StatusEnum.COMPLETED, "username");
+        });
+    }
+
+    @Test
+    void testDeleteTask_NotFound() {
+        when(taskRepository.findById(999L)).thenReturn(Optional.empty());
+
+        assertThrows(ResourceNotFoundException.class, () -> {
+            taskService.deleteTask(999L, "username");
+        });
+    }
+
 }
