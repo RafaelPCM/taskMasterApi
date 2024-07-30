@@ -55,9 +55,15 @@
 			<scope>runtime</scope>
 		</dependency>
 		<dependency>
-			<groupId>io.springfox</groupId>
-			<artifactId>springfox-boot-starter</artifactId>
-			<version>3.0.0</version>
+			<groupId>org.springdoc</groupId>
+			<artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+			<version>2.0.0</version>
+		</dependency>
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>javax.servlet-api</artifactId>
+			<version>4.0.1</version>
+			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -90,15 +96,15 @@
 		</dependency> -->
 
 		<!-- JUnit 5 -->
-		<!-- <dependency>
+		<dependency>
 			<groupId>org.junit.jupiter</groupId>
 			<artifactId>junit-jupiter</artifactId>
 			<version>5.8.1</version>
 			<scope>test</scope>
-		</dependency> -->
+		</dependency>
 	
 		<!-- Mockito -->
-		<!-- <dependency>
+		<dependency>
 			<groupId>org.mockito</groupId>
 			<artifactId>mockito-core</artifactId>
 			<version>4.0.0</version>
@@ -110,9 +116,9 @@
 			<version>4.0.0</version>
 			<scope>test</scope>
 		</dependency>
-	 -->
+	
 		<!-- Spring Boot Test -->
-		<!-- <dependency>
+		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
 			<version>2.5.6</version>
@@ -124,22 +130,29 @@
 				</exclusion>
 			</exclusions>
 		</dependency>
-	 -->
+	
 		<!-- Hamcrest -->
-		<!-- <dependency>
+		<dependency>
 			<groupId>org.hamcrest</groupId>
 			<artifactId>hamcrest-library</artifactId>
 			<version>2.2</version>
 			<scope>test</scope>
-		</dependency> -->
+		</dependency>
 	
 		<!-- Jackson -->
-		<!-- <dependency>
+		<dependency>
 			<groupId>com.fasterxml.jackson.core</groupId>
 			<artifactId>jackson-databind</artifactId>
 			<version>2.12.5</version>
 		</dependency>
-		 -->
+
+		<dependency>
+			<groupId>com.h2database</groupId>
+			<artifactId>h2</artifactId>
+			<scope>test</scope>
+		</dependency>
+		
+		
 		
 	</dependencies>
 

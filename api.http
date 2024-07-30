@@ -1,0 +1,77 @@
+### Criar nova tarefa
+POST http://localhost:8080/tasks
+Content-Type: application/json
+
+{
+  "title": "Nova Tarefa",
+  "description": "Descrição da nova tarefa",
+  "statusEnum": "TODO"
+}
+
+###
+
+### Obter todas as tarefas
+GET http://localhost:8080/tasks?page=0&size=10
+Accept: application/json
+
+###
+
+### Obter tarefa por ID
+GET http://localhost:8080/tasks/1
+Accept: application/json
+
+###
+
+### Obter tarefa por título
+GET http://localhost:8080/tasks/title/Exemplo%20de%20Tarefa
+Accept: application/json
+
+###
+
+### Atualizar tarefa
+PUT http://localhost:8080/tasks/1
+Content-Type: application/json
+
+{
+  "title": "Tarefa Atualizada",
+  "description": "Descrição atualizada",
+  "statusEnum": "IN_PROGRESS"
+}
+
+###
+
+### Deletar tarefa
+DELETE http://localhost:8080/tasks/1
+
+###
+
+### Atualizar status da tarefa para TODO
+PATCH http://localhost:8080/tasks/1/todo
+Accept: application/json
+
+###
+
+### Atualizar status da tarefa para IN_PROGRESS
+PATCH http://localhost:8080/tasks/1/in-progress
+Accept: application/json
+
+###
+
+### Atualizar status da tarefa para COMPLETED
+PATCH http://localhost:8080/tasks/1/completed
+Accept: application/json
+
+###
+
+### Atualizar status da tarefa para PAUSED
+PATCH http://localhost:8080/tasks/1/paused
+Accept: application/json
+
+###
+
+### Verificar Auditoria (Logs de alterações)
+GET http://localhost:8080/api/audit
+Accept: application/json
+
+###
+
