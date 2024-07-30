@@ -8,8 +8,10 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
 
 import java.util.Optional;
 
@@ -109,5 +111,45 @@ public class TaskControllerTest {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
+    }
+
+    @Test
+    void testSetTaskToDo() throws Exception {
+        task.setStatusEnum(StatusEnum.TODO);
+        when(taskService.updateTaskStatus(eq(task.getId()), eq(StatusEnum.TODO), eq("username"))).thenReturn(task);
+
+        mockMvc.perform(patch("/tasks/{id}/todo", task.getId()))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.statusEnum").value("TODO"));
+    }
+
+    @Test
+    void testSetTaskInProgress() throws Exception {
+        task.setStatusEnum(StatusEnum.IN_PROGRESS);
+        when(taskService.updateTaskStatus(eq(task.getId()), eq(StatusEnum.IN_PROGRESS), eq("username"))).thenReturn(task);
+
+        mockMvc.perform(patch("/tasks/{id}/in-progress", task.getId()))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.statusEnum").value("IN_PROGRESS"));
+    }
+
+    @Test
+    void testSetTaskCompleted() throws Exception {
+        task.setStatusEnum(StatusEnum.COMPLETED);
+        when(taskService.updateTaskStatus(eq(task.getId()), eq(StatusEnum.COMPLETED), eq("username"))).thenReturn(task);
+
+        mockMvc.perform(patch("/tasks/{id}/completed", task.getId()))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.statusEnum").value("COMPLETED"));
+    }
+
+    @Test
+    void testSetTaskPaused() throws Exception {
+        task.setStatusEnum(StatusEnum.PAUSED);
+        when(taskService.updateTaskStatus(eq(task.getId()), eq(StatusEnum.PAUSED), eq("username"))).thenReturn(task);
+
+        mockMvc.perform(patch("/tasks/{id}/paused", task.getId()))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.statusEnum").value("PAUSED"));
     }
 }
