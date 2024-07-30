@@ -4,8 +4,12 @@ import java.time.LocalDateTime;
 
 import org.antlr.v4.runtime.misc.NotNull;
 
+import com.taskMasterApi.domain.enums.StatusEnum;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -29,8 +33,9 @@ public class Task {
     @Column(name = "description", columnDefinition = "text", length = 500)
     private String description;
 
-    @Column(name = "completed")
-    private Boolean completed = false;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "statusEnum")
+    private StatusEnum statusEnum = StatusEnum.TODO;
 
     @Column(name = "createdAt")
     private LocalDateTime createdAt;
