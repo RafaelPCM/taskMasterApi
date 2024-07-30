@@ -2,6 +2,9 @@
 Repositório para teste do IMPA
 
 
+No projeto tem um arquivo api.http com todas as requisições e jsons necessários para testar a aplicação. Você pode usar esse arquivo em um editor de texto que suporte requisições HTTP, como o Visual Studio Code com a extensão REST Client ou o IntelliJ IDEA.
+
+
 #### TECNOLOGIAS UTILIZADAS
 
 Java JDK 17
@@ -129,7 +132,8 @@ No Body, selecionar opção "raw" e "JSON". Enviar o seguinte JSON (exemplo):
 ```JSON
 {
     "title": "teste",
-    "description": "teste"
+    "description": "teste",
+    "statusEnum": "TODO"
 }
 ```
 
@@ -147,3 +151,5 @@ https://www.atlassian.com/br/git/tutorials/comparing-workflows/gitflow-workflow
 #### Bibliotecas e Tecnologias
 
 Com o progredir do desenvolvimento do projeto, novas bilbiotecas e tecnologias começaram a ser utilizadas para ajudar, facilitar e complementar os serviços. Com isso, o conhecimento e dominio delas acabaram tornando-se indispensáveis, assim, aqui encontram-se referências para a documentação das mesmas.
+
+

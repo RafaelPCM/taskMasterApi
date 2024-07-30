@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.taskMasterApi.domain.enums.StatusEnum;
 import com.taskMasterApi.domain.model.Task;
 import com.taskMasterApi.exception.ResourceNotFoundException;
 import com.taskMasterApi.service.TaskService;
@@ -47,9 +48,6 @@ public class TaskController {
             @RequestParam(required = false) Boolean completed) {
         logger.info("Getting all tasks with pagination, page: {}, size: {}, completed: {}", page, size, completed);
         Pageable pageable = PageRequest.of(page, size);
-        if (completed != null) {
-            return taskService.getTasksByCompleted(completed, pageable);
-        }
         return taskService.getAllTasks(pageable);
     }
 
@@ -82,24 +80,36 @@ public class TaskController {
         return ResponseEntity.ok(updatedTask);
     }
 
+    @PatchMapping("/{id}/todo")
+    public ResponseEntity<Task> setTaskToDo(@PathVariable Long id) {
+        return updateTaskStatus(id, StatusEnum.TODO);
+    }
+
+    @PatchMapping("/{id}/in-progress")
+    public ResponseEntity<Task> setTaskInProgress(@PathVariable Long id) {
+        return updateTaskStatus(id, StatusEnum.IN_PROGRESS);
+    }
+
+    @PatchMapping("/{id}/completed")
+    public ResponseEntity<Task> setTaskCompleted(@PathVariable Long id) {
+        return updateTaskStatus(id, StatusEnum.COMPLETED);
+    }
+
+    @PatchMapping("/{id}/paused")
+    public ResponseEntity<Task> setTaskPaused(@PathVariable Long id) {
+        return updateTaskStatus(id, StatusEnum.PAUSED);
+    }
+
+    private ResponseEntity<Task> updateTaskStatus(Long id, StatusEnum status) {
+        logger.info("Updating task status with id: {} to {}", id, status);
+        Task updatedTask = taskService.updateTaskStatus(id, status, "username");
+        return ResponseEntity.ok(updatedTask);
+    }
+    
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteTask(@PathVariable Long id) {
         logger.info("Deleting task with id: {}", id);
         taskService.deleteTask(id, "username");
         return ResponseEntity.noContent().build();
-    }
-
-    @PatchMapping("/{id}/complete")
-    public ResponseEntity<Task> completeTask(@PathVariable Long id) {
-        logger.info("Completing task with id: {}", id);
-        Optional<Task> task = taskService.getTaskById(id);
-        if (task.isPresent()) {
-            Task t = task.get();
-            t.setCompleted(true);
-            taskService.saveTask(t, "username");
-            return ResponseEntity.ok(t);
-        } else {
-            throw new ResourceNotFoundException("Task not found with id: " + id);
-        }
     }
 }
