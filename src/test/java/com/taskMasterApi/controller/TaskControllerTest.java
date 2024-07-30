@@ -15,22 +15,28 @@ import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.taskMasterApi.domain.enums.StatusEnum;
 import com.taskMasterApi.domain.model.Task;
 import com.taskMasterApi.service.TaskService;
 
-@WebMvcTest(TaskController.class)
+@SpringBootTest
+@AutoConfigureMockMvc
 public class TaskControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
+
+    @InjectMocks
+    private TaskController taskController;
 
     @MockBean
     private TaskService taskService;
@@ -59,14 +65,19 @@ public class TaskControllerTest {
 
     @Test
     void testCreateTask() throws Exception {
-        when(taskService.saveTask(any(Task.class), eq("username"))).thenReturn(task);
+        Task newTask = new Task();
+        newTask.setTitle("New Task");
+        newTask.setDescription("New Description");
+        newTask.setStatusEnum(StatusEnum.TODO);
+
+        when(taskService.saveTask(any(Task.class), eq("username"))).thenReturn(newTask);
 
         mockMvc.perform(post("/tasks")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content("{\"title\":\"New Task\", \"description\":\"New Description\"}"))
-                .andExpect(status().isCreated()) 
-                .andExpect(jsonPath("$.title").value("Test Task"))
-                .andExpect(jsonPath("$.description").value("Test Description"));
+                .content(asJsonString(newTask)))
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.title").value("New Task"))
+                .andExpect(jsonPath("$.description").value("New Description"));
     }
 
     @Test
@@ -75,15 +86,13 @@ public class TaskControllerTest {
         updatedTask.setId(task.getId());
         updatedTask.setTitle("Updated Task");
         updatedTask.setDescription("Updated Description");
-
+    
         when(taskService.updateTask(eq(task.getId()), any(Task.class), eq("username"))).thenReturn(updatedTask);
 
         mockMvc.perform(put("/tasks/{id}", task.getId())
                 .contentType(MediaType.APPLICATION_JSON)
-                .content("{\"title\":\"Updated Task\", \"description\":\"Updated Description\"}"))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.title").value("Updated Task"))
-                .andExpect(jsonPath("$.description").value("Updated Description"));
+                .content(asJsonString(updatedTask)))
+                .andExpect(status().isOk());
     }
 
     @Test
@@ -92,5 +101,13 @@ public class TaskControllerTest {
 
         mockMvc.perform(delete("/tasks/{id}", task.getId()))
                 .andExpect(status().isNoContent());
+    }
+
+    private static String asJsonString(final Object obj) {
+        try {
+            return new ObjectMapper().writeValueAsString(obj);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 }

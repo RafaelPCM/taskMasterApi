@@ -1,5 +1,6 @@
 package com.taskMasterApi.controller;
 
+import java.net.URI;
 import java.util.Optional;
 
 import org.slf4j.Logger;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.taskMasterApi.domain.enums.StatusEnum;
 import com.taskMasterApi.domain.model.Task;
@@ -68,9 +70,17 @@ public class TaskController {
     }
 
     @PostMapping
-    public Task createTask(@RequestBody Task task) {
+    public ResponseEntity<Task> createTask(@RequestBody Task task) {
         logger.info("Creating new task: {}", task);
-        return taskService.saveTask(task, "username");
+        Task createdTask = taskService.saveTask(task, "username");
+
+        URI location = ServletUriComponentsBuilder
+                .fromCurrentRequest()
+                .path("/{id}")
+                .buildAndExpand(createdTask.getId())
+                .toUri();
+
+        return ResponseEntity.created(location).body(createdTask);
     }
 
     @PutMapping("/{id}")
