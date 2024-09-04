@@ -1,5 +1,4 @@
 # PROJETO TASKMASTERAPI
-Repositório para teste do IMPA
 
 
 No projeto tem um arquivo api.http com todas as requisições e jsons necessários para testar a aplicação. Você pode usar esse arquivo em um editor de texto que suporte requisições HTTP, como o Visual Studio Code com a extensão REST Client ou o IntelliJ IDEA.
